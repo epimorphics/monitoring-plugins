@@ -89,8 +89,7 @@ def check(now, filename):
   except FileNotFoundError:
     return (args.missing, False, "{}: {} - not found".format(status[args.missing], filename))
   except:
-    print("Unexpected error:", sys.exc_info()[0])
-    return 3
+    return (3, False, "Unexpected error: {}".format(sys.exc_info()[0])
 
   rc = age(now, t)
   text = "{}: {} - {}".format(status[rc], filename, datetime.datetime.fromtimestamp(t).ctime())
