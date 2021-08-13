@@ -15,7 +15,7 @@ parser.add_argument("-r", "--reverse",  dest="reverse", help="Reverse age condit
 parser.add_argument("-w", "--warning",  dest="warning", help="Warning if file age exceeds (seconds)", default=0, type=int, action="store")
 parser.add_argument("-W",  dest="warn_threshold", help="Warning threshold of required files", default=0, type=int, action="store")
 parser.add_argument("-x", "--missing",  dest="missing", help="Status if file absent. 0:OK, 1:Warning, 2:Critial, 3:Unknown [default]", default=3, type=int, action="store")
-parser.add_argument("-v", "--verbose",  dest="verbose", help="verbose",  action="store_true")
+parser.add_argument("-v", "--verbose",  dest="verbose", help="Verbose: display failure cases",  action="store_true")
 parser.add_argument("-V", "--version", action='version', version='%(prog)s 1.0')
 parser.add_argument("file", type=pathlib.Path, nargs='*')
 
