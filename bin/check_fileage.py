@@ -15,6 +15,7 @@ parser.add_argument("-r", "--reverse",  dest="reverse", help="Reverse age condit
 parser.add_argument("-w", "--warning",  dest="warning", help="Warning if file age exceeds (seconds)", default=0, type=int, action="store")
 parser.add_argument("-W",  dest="warn_threshold", help="Warning threshold of required files", default=0, type=int, action="store")
 parser.add_argument("-x", "--missing",  dest="missing", help="Status if file absent. 0:OK, 1:Warning, 2:Critial, 3:Unknown [default]", default=3, type=int, action="store")
+parser.add_argument("-v", "--verbose",  dest="verbose", help="verbose",  action="store_true")
 parser.add_argument("-V", "--version", action='version', version='%(prog)s 1.0')
 parser.add_argument("file", type=pathlib.Path, nargs='*')
 
@@ -89,7 +90,8 @@ def check(now, filename):
   except FileNotFoundError:
     return (args.missing, False, "{}: {} - not found".format(status[args.missing], filename))
   except:
-    return (3, False, "Unexpected error: {}".format(sys.exc_info()[0])
+    print("Unexpected error:", sys.exc_info()[0])
+    return 3
 
   rc = age(now, t)
   text = "{}: {} - {}".format(status[rc], filename, datetime.datetime.fromtimestamp(t).ctime())
@@ -100,16 +102,20 @@ def main(argv):
   now = time.mktime(time.localtime())
 # print("now:{}".format(now))
 # print("missing:{}".format(args.missing))
-  state = 0
+  state = 3
   good = 0
   summary = []
+
+  if args.file:
+    state = 0
 
   for f in args.file:
 #   print("arg:{}".format(f))
     (rc, found, text) = check(now, f)
     if found and (rc == 0):
       good += 1
-    summary.append(text)
+    if args.verbose or (rc == 0):
+      summary.append(text)
     if rc > state:
       state = rc
 
