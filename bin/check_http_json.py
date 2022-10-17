@@ -15,6 +15,7 @@ parser.add_argument("-G", "--greater",  dest="greater_than", help="The key must 
 parser.add_argument("-K", "--key",  dest="key", help="The key field within the json to test. If the key is a container the size of the container is used.", type=str, action="store", required=False, default=".")
 parser.add_argument("-L", "--less",  dest="less_than", help="The key must be less than this value.", type=str, action="store", required=False)
 parser.add_argument("-p", "--password",  dest="password", help="Authentication password", type=str, action="store", required=False)
+parser.add_argument("-E", "--error-code",  dest="error_code", help="The desired HTTP Error Code.", type=int, action="store", required=False, default=False)
 parser.add_argument("-r", "--redirect",  dest="redirect", help="Redirect are followed.", type=str, action="store", required=False, default=False)
 parser.add_argument("-u", "--username",  dest="username", help="Authentication username", type=str, action="store", required=False)
 parser.add_argument("-U", "--url",  dest="url", help="URL", type=str, action="store", required=True)
@@ -128,6 +129,9 @@ def main(argv):
     return state
   except requests.exceptions.HTTPError as http_error:
     print(http_error)
+    if (args.error_code):
+      if (http_error.response.status_code == args.error_code):
+        state = 0
     return state
   except requests.exceptions.ConnectionError:
     print("Connection failed to {}".format(args.url))
