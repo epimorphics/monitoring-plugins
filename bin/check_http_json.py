@@ -142,7 +142,7 @@ def main(argv):
 
   try:
     state = test(re.sub("^\.", "", args.key), resp.json())
-  except simplejson.errors.JSONDecodeError:
+  except simplejson.decoder.JSONDecodeError:
     print("Invalid JSON returned")
     return state
 
