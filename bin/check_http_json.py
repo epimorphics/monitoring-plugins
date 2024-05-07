@@ -61,25 +61,18 @@ def test(k, data):
   elif (isinstance(data, list)):
     d = data[int(ka[0])] if int(ka[0]) < len(data) else None 
   else:
-    print("{}:{} not present".format(status[state],args.key))
+    print("{}:key {} not present in returned JSON data".format(status[state], args.key))
     return state
 
   if d is None:
-#   print("A", ka)
-    print("{}:{} not present".format(status[state],args.key))
+    print("{}:key {} not present in returned JSON data".format(status[state], args.key))
     return state
   elif (len(ka) > 1):
-#   print("B1", ka)
-#   print(type(d))
     if d and (isinstance(d, dict) or isinstance(d, list)):
-#     print("B2", ka)
       return(test(ka[1], d))
-#   print("B3", ka)
-    print("{}:{} not present".format(status[state],args.key))
+    print("{}:key {} not present in returned JSON data".format(status[state], args.key))
     return state
   else:
-#   print("C", ka)
-#   print(type(d))
     state = 2
     if isinstance(d, str):
       if d == args.value:
@@ -103,14 +96,14 @@ def test(k, data):
     elif isinstance(d, list) or isinstance(d, dict):
       if inttest(len(d)):
         state = 0
-      print("{}:{}(Elements) = {}".format(status[state],args.key, len(d)))
+      print("{}:key {} has unexpected size ({}) in returned JSON data".format(status[state], args.key, len(d)))
       return state
     else:
       state = 3
-      print("{}: Unhandled type: {}",format(status[state], type(d)))
+      print("{}: Unhandled type: {} in returned JSON data",format(status[state], type(d)))
       return state
 
-  print("{}:{} = {}".format(status[state],args.key, d))
+  print("{}:{} = {}".format(status[state], args.key, d))
   return state
 
 def main(argv):
