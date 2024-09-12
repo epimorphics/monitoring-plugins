@@ -10,7 +10,7 @@ PROG=$(basename $0)
 
 check () 
 {
-  docker container stats --no-stream $NAME 2>&1
+  docker top $NAME > /dev/null && docker container stats --no-stream $NAME 2>&1
   case $? in 
     0)
       exit $OK;;
