@@ -10,14 +10,14 @@ PROG=$(basename $0)
 
 check () 
 {
-  docker top $NAME > /dev/null && docker container stats --no-stream $NAME 2>&1
-  case $? in 
-    0)
-      exit $OK;;
-    1)
-      exit $CRITICAL;;
-    *) # Unknown service
-      exit $UNKNOWN;;
+  STATUS=$(docker container inspect $NAME 2> /dev/null | jq -r .[0].State.Status)
+  
+  case $STATUS in 
+    running)
+       docker container stats --no-stream $NAME 2>&1
+       exit $OK;;
+    *) [ "$STATUS" == "null" ] && echo "Container $NAME not running" || echo "Container $NAME $STATUS"
+       exit $CRITICAL;;
   esac
 }
 
