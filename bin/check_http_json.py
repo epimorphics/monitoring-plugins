@@ -35,8 +35,11 @@ if args.value:
 
 
 def str2date(s):
-  return dateparser.parse(s, languages=['en']).timestamp()
-
+  try:
+    return dateparser.parse(s, languages=['en']).timestamp()
+  except:
+    return None
+  
 
 def get():
   r = {}
