@@ -36,7 +36,8 @@ if args.value:
 
 def str2date(s):
   try:
-    return dateparser.parse(s, languages=['en']).timestamp()
+    timestamp = dateparser.parse(s, languages=['en'], locales=['en-GB']).timestamp()
+    return timestamp
   except:
     return None
   
@@ -114,7 +115,7 @@ def test(k, data):
       dt = str2date(d)
       if dt is None:
         if args.more_than or args.less_than:
-          print("-L/-M options not available for non-date string fields")
+          print("-L/-M options not available for non-date string values like '{}'".format(d))
           return 3
         elif d == args.value:
           state = 0
@@ -125,7 +126,6 @@ def test(k, data):
       if valtest(d):
         state = 0
     elif isinstance(d, int):
-      print("a1")
       if valtest(float(d)):
         state = 0
     elif isinstance(d, list) or isinstance(d, dict):
